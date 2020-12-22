@@ -1,0 +1,11 @@
+1) Use JAGS. Might not be ideal because it does not enable re-ordering of communities
+
+2) number of clusters was always overestimated. This might be because of the way they judge the number of communities.
+
+3) assumes deviations from community level parameters come from Dirichlet process with multivariate normal distribution
+
+4) assumes a single parameter w that determines the amount of variation among cluster- specific coefficients. Instead of this, I would allow intercepts as fixed effects (I don't think that it makes sense to cluster intercepts) and slope coefficients to all have the same prior variance, defined by the user. This prior variance determines how close the behavior of species have to be for them to be clustered together.
+
+
+
+
