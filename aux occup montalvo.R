@@ -56,6 +56,7 @@ sample.ystar=function(nrep,xmat.det,gammas,y,nnloc,nspp){
 sample.betas1=function(m.betas1,tau2.betas1,betas2,
                       xmat.occ1,xtx1,zss,nspp,nparam.occ1){
   prec1=diag(1/tau2.betas1)
+  if (nparam.occ1==1) prec1=1/tau2.betas1
   var1=solve(xtx1+prec1)
   
   betas1=matrix(NA,nparam.occ1,nspp)

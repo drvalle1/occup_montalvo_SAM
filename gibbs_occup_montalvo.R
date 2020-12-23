@@ -100,15 +100,24 @@ gibbs_occup=function(y,xmat.occ1,xmat.occ2, xmat.det,ngr,tau2.a,tau2.b,
       k1=rep(0,ngr)
       k1[as.numeric(names(k))]=k
       ind=order(k1,decreasing=T)
-      theta=theta[ind]
-      betas2=betas2[,ind]
-      if (nparam.occ2==1) betas2=matrix(betas2,1,ngr)
-      wnew=w
-      for (j in 1:ngr){
-        cond=w==ind[j]
-        wnew[cond]=j
+      
+      #if re-ordering needs to be done
+      if (sum(ind!=1:ngr)>0) {
+        theta=theta[ind]
+        betas2=betas2[,ind]
+        if (nparam.occ2==1) betas2=matrix(betas2,1,ngr)
+        wnew=w
+        for (j in 1:ngr){
+          cond=w==ind[j]
+          wnew[cond]=j
+        }
+        w=wnew
       }
-      w=wnew
+      
+      #if re-ordering does not need to be done
+      ind=sample(1:nspp,size=1)
+      uni.gr=sample(unique(w),size=1)
+      w[ind]=uni.gr
     }
   
     #store results
@@ -123,10 +132,10 @@ gibbs_occup=function(y,xmat.occ1,xmat.occ2, xmat.det,ngr,tau2.a,tau2.b,
     store.theta[i,]=theta
     store.llk[i]=llk
   }
-  
-  list(betas1=store.betas1,m.betas1=store.m.betas1,tau2.betas1=store.tau2.betas1,
-       betas2=store.betas2,
-       gammas=store.gammas,m.gamma=store.m.gamma,tau2.gamma=store.tau2.gamma,
-       w=store.w,theta=store.theta,
+  seq1=nburn:ngibbs
+  list(betas1=store.betas1[seq1,],m.betas1=store.m.betas1[seq1,],tau2.betas1=store.tau2.betas1[seq1,],
+       betas2=store.betas2[seq1,],
+       gammas=store.gammas[seq1,],m.gamma=store.m.gamma[seq1,],tau2.gamma=store.tau2.gamma[seq1,],
+       w=store.w[seq1,],theta=store.theta[seq1,],
        llk=store.llk)
 }
